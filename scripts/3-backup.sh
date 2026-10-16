@@ -52,7 +52,18 @@ rm -f "${TMP_SQL}"
 echo "✅ Database backed up: db_${DATE}.sql.gz"
 
 # 2. Uploads backup
-tar -czf "${BACKUP_DIR}/uploads_${DATE}.tar.gz" -C ./web/app uploads
-echo "✅ Files backed up: uploads_$DATE.tar.gz"
+docker compose exec -T app tar -czf - -C /app/web/app uploads > "${BACKUP_DIR}/uploads_${DATE}.tar.gz"
+echo "✅ Files backed up: uploads_${DATE}.tar.gz"
+
+# 3. Checksums
+(
+	cd "${BACKUP_DIR}"
+	sha256sum "db_${DATE}.sql.gz" "uploads_${DATE}.tar.gz" > "backup_${DATE}.sha256"
+)
+echo "✅ Checksum generated: backup_${DATE}.sha256"
+
+# 4. Retention (prune backups older than 14 days)
+find "${BACKUP_DIR}" -type f \( -name "*.gz" -o -name "*.sha256" \) -mtime +14 -delete
+echo "✅ Pruned backups older than 14 days"
 
 echo "🎉 Backup completed successfully in $BACKUP_DIR"
