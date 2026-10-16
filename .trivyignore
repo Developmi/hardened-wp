@@ -1,0 +1,7 @@
+# Trivy ignore file - Hardened WP
+#
+# CVE-2026-78669: HTTP/2 excessive SETTINGS frames DoS in golang.org/x/net
+# Component: usr/local/bin/frankenphp (compiled inside upstream base image)
+# Status: Fixed in golang.org/x/net v0.60.0. Awaiting upstream dunglas/frankenphp image rebuild.
+# Mitigation: Ingress reverse-proxy / edge WAF terminates and sanitizes HTTP/2 frames.
+CVE-2026-78669

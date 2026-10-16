@@ -1,0 +1,67 @@
+name: Lint
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lint code and workflows
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@d52fc211a0436f8839a587b3b5b8efddab4744ea # v2
+        with:
+          php-version: '8.3'
+          coverage: none
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict --check-lock --no-check-all
+
+      - name: Install system linters
+        run: |
+          set -euo pipefail
+
+          # actionlint v1.7.12 - sha256 verified
+          curl -fsSL "https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_amd64.tar.gz" \
+            -o /tmp/actionlint.tar.gz
+          echo "8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8  /tmp/actionlint.tar.gz" | sha256sum -c -
+          tar -xz -C /usr/local/bin -f /tmp/actionlint.tar.gz actionlint
+          chmod 755 /usr/local/bin/actionlint
+          rm -f /tmp/actionlint.tar.gz
+
+          # hadolint v2.15.1 - sha256 verified
+          curl -fsSL "https://github.com/hadolint/hadolint/releases/download/v2.15.1/hadolint-linux-x86_64" \
+            -o /tmp/hadolint
+          echo "c7187db94eeeeca956519a6af171adc31453941a1e777961f6e680f697c8c507  /tmp/hadolint" | sha256sum -c -
+          install -m 0755 /tmp/hadolint /usr/local/bin/hadolint
+          rm -f /tmp/hadolint
+
+      - name: Lint GitHub Actions
+        run: actionlint
+
+      - name: Lint GitHub Actions security (zizmor)
+        run: uvx zizmor .
+
+      - name: Lint Dockerfile
+        run: hadolint --ignore DL3025 --failure-threshold warning Dockerfile
+
+      - name: Lint shell scripts
+        run: shellcheck -e SC2034 scripts/*.sh
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Run Pint (PHP formatting)
+        run: vendor/bin/pint --test

@@ -1,0 +1,72 @@
+name: Test Suite
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Stack Integration and Security Tests
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Prepare environment configuration
+        run: |
+          cp .env.example .env
+          cp Caddyfile.example Caddyfile
+
+      - name: Build and start stack
+        run: docker compose up -d --build
+
+      - name: Wait for healthy stack
+        run: |
+          echo "Waiting for stack containers to reach healthy state..."
+          for i in $(seq 1 30); do
+            APP_HEALTH="$(docker inspect -f '{{.State.Health.Status}}' bedrock_app 2>/dev/null || echo 'starting')"
+            DB_HEALTH="$(docker inspect -f '{{.State.Health.Status}}' bedrock_db 2>/dev/null || echo 'starting')"
+            echo "Attempt $i/30: app=${APP_HEALTH}, db=${DB_HEALTH}"
+            if [ "$APP_HEALTH" = "healthy" ] && [ "$DB_HEALTH" = "healthy" ]; then
+              echo "Stack is healthy."
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "Stack failed to become healthy within timeout."
+          docker compose ps
+          docker compose logs
+          exit 1
+
+      - name: Run security tests
+        run: bash scripts/4-test-security.sh
+
+      - name: Run backup test and verify checksums
+        run: |
+          bash scripts/3-backup.sh
+          LATEST_CHECKSUM="$(find backups -maxdepth 1 -name "backup_*.sha256" | sort | tail -n 1)"
+          test -n "$LATEST_CHECKSUM"
+          (cd backups && sha256sum -c "$(basename "$LATEST_CHECKSUM")")
+
+      - name: Run Trivy container scan
+        uses: aquasecurity/trivy-action@18f2510ee396bbf400402947b394f2dd8c87dbb0 # v0.29.0
+        with:
+          image-ref: developmi/hardened-wp:local
+          format: table
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: CRITICAL,HIGH
+
+      - name: Tear down stack
+        if: always()
+        run: docker compose down -v
