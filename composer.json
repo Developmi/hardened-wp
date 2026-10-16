@@ -1,9 +1,9 @@
 {
-  "name": "miguel-devops/bedrock-ship",
+  "name": "developmi/hardened-wp",
   "type": "project",
   "license": "MIT",
-  "description": "Production-ready WordPress Docker image — Bedrock + FrankenPHP + Acorn, rootless and lightweight",
-  "homepage": "https://github.com/Miguel-DevOps/bedrock-ship",
+  "description": "Production-ready WordPress Docker image - Bedrock + FrankenPHP + Acorn, rootless and lightweight",
+  "homepage": "https://github.com/Developmi/hardened-wp",
   "authors": [
     {
       "name": "Scott Walkinshaw",
@@ -28,7 +28,7 @@
     "bedrock", "wordpress", "docker", "frankenphp", "acorn", "wp", "caddy"
   ],
   "support": {
-    "issues": "https://github.com/Miguel-DevOps/bedrock-ship/issues"
+    "issues": "https://github.com/Developmi/hardened-wp/issues"
   },
   "repositories": [
     {
@@ -45,13 +45,13 @@
     "oscarotero/env": "^2.1",
     "roots/bedrock-autoloader": "^1.0",
     "roots/bedrock-disallow-indexing": "^2.0",
-    "roots/wordpress": "6.9.4",
+    "roots/wordpress": "^7.1",
     "roots/wp-config": "1.0.0",
-    "roots/acorn": "6.1.0",
+    "roots/acorn": "^6.3",
     "wpackagist-theme/twentytwentyfive": "^1.0"
   },
   "require-dev": {
-    "laravel/pint": "^1.29"
+    "laravel/pint": "^1.32"
   },
   "config": {
     "optimize-autoloader": true,
