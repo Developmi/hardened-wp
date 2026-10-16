@@ -1,4 +1,4 @@
-# Contributing to Bedrock Ship
+# Contributing to Hardened WP
 
 Thank you for your interest in contributing. This project follows the Developmi engineering standard.
 
@@ -6,9 +6,10 @@ Thank you for your interest in contributing. This project follows the Developmi 
 
 ```bash
 # Clone and install
-git clone https://github.com/Miguel-DevOps/bedrock-ship.git
-cd bedrock-ship
+git clone https://github.com/Developmi/hardened-wp.git
+cd hardened-wp
 cp .env.example .env
+cp Caddyfile.example Caddyfile
 # Edit .env with your local values
 docker compose up -d
 ```
@@ -46,7 +47,7 @@ chore/bump-dependencies
 
 ## Reporting issues
 
-Use [GitHub Issues](https://github.com/Miguel-DevOps/bedrock-ship/issues). Include:
+Use [GitHub Issues](https://github.com/Developmi/hardened-wp/issues). Include:
 - Steps to reproduce
 - Expected vs. actual behavior
 - Environment (OS, Docker version, Docker Compose version)

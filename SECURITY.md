@@ -12,8 +12,8 @@
 **Do not open a public GitHub issue for security vulnerabilities.**
 
 Report vulnerabilities privately via one of these channels:
-- **GitHub Security Advisories:** [Report a vulnerability](https://github.com/Miguel-DevOps/bedrock-ship/security/advisories/new)
-- **Email:** miguel@developmi.com — encrypt with PGP if the finding is critical.
+- **GitHub Security Advisories:** [Report a vulnerability](https://github.com/Developmi/hardened-wp/security/advisories/new)
+- **Email:** miguel@developmi.com - encrypt with PGP if the finding is critical.
 
 Include in your report:
 - Description of the vulnerability and its potential impact.

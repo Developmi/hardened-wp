@@ -1,242 +1,269 @@
 <div align="center">
 
-<img src="docs/assets/logo.png" width="180" alt="Bedrock Ship Logo Made By Developmi" />
+<img src="docs/assets/logo.png" width="180" alt="Hardened WP Logo Made By Developmi" />
 
-# Bedrock Ship - WordPress, Production Ready | Developmi
+# Hardened WP - WordPress, Production Ready | Developmi
 
-*Secure, modern WordPress boilerplate in a single Docker image - clone, build, deploy in minutes.*
+*Hardened, enterprise-grade WordPress distribution built on Roots Bedrock and FrankenPHP in a secure container runtime.*
 
-![PHP](https://img.shields.io/badge/PHP_8.3-777BB4?style=for-the-badge&logo=php&logoColor=white)
-![FrankenPHP](https://img.shields.io/badge/FrankenPHP-FFD93C?style=for-the-badge&logo=caddy&logoColor=black)
-![Bedrock](https://img.shields.io/badge/Bedrock-Roots.io-525DDC?style=for-the-badge)
-![Docker](https://img.shields.io/badge/Docker-READY-2496ED?style=for-the-badge&logo=docker&logoColor=white)
-![Status](https://img.shields.io/badge/Status-Production_Active-brightgreen?style=for-the-badge)
-![License](https://img.shields.io/badge/License-MIT_©_Miguel_Lozano_|_Developmi-blue?style=for-the-badge)
-![Maintainer](https://img.shields.io/badge/Maintainer-Miguel_Lozano-black?style=for-the-badge)
-![Role](https://img.shields.io/badge/Cloud_&_Infrastructure_Engineer-333?style=for-the-badge)
+[![PHP 8.3](https://img.shields.io/badge/PHP_8.3-777BB4?style=for-the-badge&logo=php&logoColor=white)](https://www.php.net/)
+[![FrankenPHP](https://img.shields.io/badge/FrankenPHP-FFD93C?style=for-the-badge&logo=caddy&logoColor=black)](https://frankenphp.dev/)
+[![Bedrock Roots](https://img.shields.io/badge/Bedrock-Roots.io-525DDC?style=for-the-badge)](https://roots.io/bedrock/)
+[![Docker](https://img.shields.io/badge/Docker-READY-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
+[![CI](https://img.shields.io/badge/CI-Passing-brightgreen?style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/Developmi/hardened-wp/actions)
+[![Supply Chain](https://img.shields.io/badge/Supply_Chain-Cosign_|_CycloneDX-4A90D9?style=for-the-badge)](https://github.com/Developmi/hardened-wp/actions)
+[![Status](https://img.shields.io/badge/Status-Production_Active-brightgreen?style=for-the-badge)](https://github.com/Developmi/hardened-wp)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](./LICENSE.md)
+![Maintainer](https://img.shields.io/badge/Maintainer-Miguel_Lozano_|_Cloud_&_Infrastructure_Engineer-black?style=for-the-badge)
+
+> Curated by [Miguel Lozano](https://developmi.com) • [GitHub](https://github.com/Miguel-DevOps) • [Container Repository](https://github.com/Developmi/hardened-wp)
 
 </div>
 
 ---
 
-## 📋 Table of contents
+## 📋 Table of Contents
 
-- [🎯 Overview](#-overview)
-- [⚡ Quick start](#-quick-start)
-- [🐳 Production build](#-production-build)
-- [🛠️ Customizing](#-customizing)
-- [🏗️ Project structure](#-project-structure)
-- [🔧 Environment variables](#-environment-variables)
-- [🔒 Security](#-security)
-- [📄 License](#-license)
-- [🤝 Contributing](#-contributing)
-- [🤝 Contact & support](#-contact--support)
+- [Hardened WP - WordPress, Production Ready | Developmi](#hardened-wp---wordpress-production-ready--developmi)
+  - [📋 Table of Contents](#-table-of-contents)
+  - [🎯 Overview](#-overview)
+  - [🏗️ Architecture](#️-architecture)
+  - [🔒 Security Hardening Posture](#-security-hardening-posture)
+  - [⚡ Quick Start](#-quick-start)
+    - [Prerequisites](#prerequisites)
+    - [1. Clone \& Diagnose](#1-clone--diagnose)
+    - [2. Configure Environment](#2-configure-environment)
+    - [3. Launch Development Stack](#3-launch-development-stack)
+    - [4. Verify Health Probe](#4-verify-health-probe)
+    - [5. Access Application](#5-access-application)
+  - [🛠️ Canonical Developer Workflows](#️-canonical-developer-workflows)
+  - [🧩 WP-CLI Operations](#-wp-cli-operations)
+  - [💾 Backup \& Disaster Recovery](#-backup--disaster-recovery)
+  - [📚 SRE Documentation \& Runbooks](#-sre-documentation--runbooks)
+  - [⚙️ Environment Configuration](#️-environment-configuration)
+  - [🤝 Contributing](#-contributing)
+  - [📄 License \& Support](#-license--support)
 
 ---
 
 ## 🎯 Overview
 
-A **production-ready Docker image** of [Bedrock](https://roots.io/bedrock/) - the modern, secure WordPress boilerplate by [Roots.io](https://roots.io/) - served by [FrankenPHP](https://frankenphp.dev).
+**Hardened WP** is an enterprise-grade containerized distribution of [Bedrock](https://roots.io/bedrock/) (the modern, twelve-factor WordPress boilerplate by Roots.io) served by [FrankenPHP](https://frankenphp.dev) (Go + PHP 8.3 with built-in Caddy server).
 
-It includes **Acorn**, the Laravel integration layer for WordPress, so you get Blade templates, service containers, and all the Laravel goodies right out of the box.
-
-**This is NOT the standard (insecure) WordPress image.** Bedrock moves WordPress core out of the web root, manages plugins/themes via Composer, and stores secrets in environment variables - the way modern applications should.
-
----
-
-## What's inside
-
-| Layer | Technology |
-|-------|------------|
-| **Server** | [FrankenPHP](https://frankenphp.dev) (Go + PHP 8.3, Caddy, HTTP/3-ready) |
-| **WordPress** | Bedrock structure ([Roots.io](https://roots.io/bedrock/)) |
-| **Framework** | [Acorn 6.x](https://roots.io/acorn/) - Laravel in WordPress |
-| **Build** | Docker multi-stage (< 150 MB final image) |
-| **Security** | Rootless container (www-data), port 8080, OPcache, env-based config |
-
-**Deliberately NOT included** (add these to fit YOUR project):
-- Sage theme (you pick your theme)
-- Caddy WAF / reverse proxy (add in front if needed)
-- Redis / object cache (plugin territory)
-- S3 uploads (plugin territory)
+Unlike conventional WordPress Docker setups that expose writeable document roots, embed credentials in code, and run under unconfined root users, Hardened WP enforces strict security defaults:
+- **Clean Separation of Concerns**: WordPress core is isolated in `/app/web/wp/` managed entirely by Composer, keeping VCS repositories clean.
+- **Acorn Integration**: Roots Acorn provides Laravel 11 components, Blade templating, and service container architecture out of the box.
+- **FrankenPHP Performance**: High-concurrency Caddy web server with native worker threads, HTTP/3, and zstd/brotli/gzip compression.
+- **Zero Known Vulnerabilities**: Zero active CVEs across all transitive Composer dependencies.
 
 ---
 
-## ⚡ Quick start
+## 🏗️ Architecture
 
+```mermaid
+flowchart TD
+    Client["Client / Browser"] -->|"HTTPS / TLS 1.3"| Ingress["Ingress / Reverse Proxy<br/>(Caddy WAF / Edge TLS)"]
+    Ingress -->|"HTTP (127.0.0.1:8080)"| FrankenPHP["FrankenPHP Container (UID 82:82)<br/>Caddy Web Server & Worker Engine"]
+
+    subgraph AppContainer ["Docker Container: bedrock_app (UID 82:82)"]
+        FrankenPHP -->|"/healthz"| Healthz["Health Probe (HTTP 200 OK)"]
+        FrankenPHP -->|"Static Web Assets"| Static["Web Root (/app/web)"]
+        FrankenPHP -->|"PHP FastCGI Engine"| Bedrock["WordPress Core + Roots Bedrock (/app)"]
+        Bedrock -->|"Media Uploads"| UploadsVol["Named Volume: wp_uploads (/app/web/app/uploads)"]
+        Bedrock -->|"Compiled Views"| CacheVol["Acorn Blade Cache (/app/web/app/cache)"]
+    end
+
+    subgraph DBContainer ["Docker Container: bedrock_db (MariaDB 11.4)"]
+        Bedrock -->|"TCP / Port 3306"| MariaDB["MariaDB 11.4 Engine"]
+        MariaDB -->|"Persistent Data"| DBVol["Named Volume: db_data (/var/lib/mysql)"]
+    end
+
+    subgraph BackupSvc ["Automated Operations Service"]
+        BackupScript["Backup Utility (scripts/3-backup.sh)"] -->|"mariadb-dump"| MariaDB
+        BackupScript -->|"tar archive"| UploadsVol
+        BackupScript -->|"SHA-256 Manifest + 14d Retention"| BackupsDir["Cold Backups (./backups)"]
+    end
+```
+
+---
+
+## 🔒 Security Hardening Posture
+
+Bedrock Ship incorporates multi-tier defense-in-depth controls across supply chain, container runtime, network perimeter, and filesystem:
+
+| Security Vector | Implementation Detail | Operational Benefit |
+| :--- | :--- | :--- |
+| **Runtime Identity** | Non-root numeric execution (`USER 82:82`, `www-data:www-data`) | Compliance with Kubernetes Restricted Pod Security Standards. |
+| **Privilege Escalation** | `security_opt: ["no-new-privileges:true"]` on all containers | Prevents `setuid` privilege escalation exploits inside containers. |
+| **cgroups Resource Limits** | Explicit CPU (1.5), Memory (512MB/1024MB), and PIDs limits (100/150) | Eliminates noisy-neighbor risks and mitigates Fork Bomb DoS. |
+| **Vulnerability Status** | **0 CVEs** verified by `composer audit` and continuous Trivy scanning | Remediated all transitive Symfony and Guzzle vulnerability vectors. |
+| **Uploads Execution Lock** | Caddy matcher `@disallowUploadPhp` returning `403 Forbidden` | Completely prevents execution of uploaded webshells in `/app/uploads/`. |
+| **Localhost Port Confinement** | Bound strictly to `127.0.0.1:${APP_PORT:-8080}:8080` in Compose | Prevents unintended public exposure on multi-tenant Docker hosts. |
+| **Base Image Immutability** | Multi-stage stages digest-pinned to immutable `@sha256:...` digests | Guarantees deterministic, tamper-proof reproducible container builds. |
+| **Supply Chain Assurance** | Keyless Cosign OIDC signing and CycloneDX SBOM generation | Verifiable origin, non-repudiation, and transparent dependency audit. |
+| **Liveness Probing** | Dedicated `/healthz` endpoint returning `200 OK` | Zero-overhead uptime checks without hitting PHP worker processes. |
+
+---
+
+## ⚡ Quick Start
+
+### Prerequisites
+- Docker Engine 24.0+ and Docker Compose v2.20+
+- GNU Make
+
+### 1. Clone & Diagnose
 ```bash
-# 1. Clone
-git clone https://github.com/Miguel-DevOps/bedrock-ship.git && cd bedrock-ship
+git clone https://github.com/Developmi/hardened-wp.git
+cd hardened-wp
+make doctor
+```
 
-# 2. Configure your environment
+### 2. Configure Environment & Web Server
+```bash
 cp .env.example .env
-# Edit .env - set MARIADB_ROOT_PASSWORD and DATABASE_URL at minimum
-
-# 3. Start everything
-docker compose up -d
-
-# 4. Open WordPress installer
-open http://localhost:8080
+cp Caddyfile.example Caddyfile
+# Configure MARIADB_ROOT_PASSWORD, DATABASE_URL, and cryptographic salts in .env
 ```
 
-That's it. No PHP, no Composer, no Node.js needed locally.
+### 3. Launch Development Stack
+```bash
+make dev
+```
+
+### 4. Verify Health Probe
+```bash
+make test
+```
+
+### 5. Access Application
+Open [http://127.0.0.1:8080](http://127.0.0.1:8080) in your browser to complete WordPress initial setup.
 
 ---
 
-## 🐳 Production build
+## 🛠️ Canonical Developer Workflows
 
-Build the standalone image for any registry:
+Hardened WP provides a standardized, canonical `Makefile` interface for development, quality control, operations, and testing:
 
 ```bash
-# Build
-docker build -t bedrock-ship:latest .
-
-# Run (with external database)
-docker run -d \
-  -p 8080:8080 \
-  -e DATABASE_URL=mysql://user:pass@host:3306/dbname \
-  -e WP_HOME=https://mysite.com \
-  -e WP_SITEURL=https://mysite.com/wp \
-  -e AUTH_KEY=... \
-  -e SECURE_AUTH_KEY=... \
-  # ... (all salts)
-  bedrock-ship:latest
+make help
 ```
 
-Or pull the pre-built image from GHCR:
+| Category | Command | Action |
+| :--- | :--- | :--- |
+| **Setup** | `make doctor` | Verify prerequisites (`docker`, `compose`, `git`, `.env`) |
+| | `make build` | Build local container image (`developmi/hardened-wp:local`) |
+| **Runtime & Stack** | `make dev` | Launch complete stack in background (`docker compose up -d`) |
+| | `make down` | Stop running containers (`docker compose down`) |
+| | `make down-v` | Stop containers and wipe volumes (`docker compose down -v`) |
+| | `make restart` | Restart stack services (`docker compose restart`) |
+| | `make ps` | Display active container status and health (`docker compose ps`) |
+| | `make logs` | Follow aggregate logs from all services (`docker compose logs -f`) |
+| | `make logs-app` | Follow application container logs (`docker compose logs -f app`) |
+| | `make logs-db` | Follow database container logs (`docker compose logs -f mariadb`) |
+| **Quality & Linting** | `make lint` | Run entire linter suite (PHP, Composer, shell, actions, Dockerfile, zizmor) |
+| | `make lint-php` | Validate PHP code style with Laravel Pint (`pint --test`) |
+| | `make lint-composer` | Validate `composer.json` and `composer.lock` in strict mode |
+| | `make lint-shell` | Lint shell scripts with ShellCheck |
+| | `make lint-actions` | Lint GitHub Actions workflows with Actionlint |
+| | `make lint-docker` | Lint Dockerfile with Hadolint |
+| | `make lint-security` | Lint GitHub Actions workflows with Zizmor (`zizmor .`) |
+| | `make format` | Automatically reformat PHP codebase with Laravel Pint |
+| | `make audit` | Audit Composer dependencies for known CVEs (`composer audit`) |
+| | `make test` | Probe application liveness endpoint (`/healthz`) |
+| | `make test-security` | Scan local image for CRITICAL and HIGH CVEs with Trivy |
+| **Utilities** | `make cli` | Open interactive shell inside application container |
+| | `make wp CMD="..."` | Execute WP-CLI command (e.g. `make wp CMD="core version"`) |
+| | `make backup` | Execute database + uploads backup with SHA-256 manifest |
+
+---
+
+## 🧩 WP-CLI Operations
+
+Manage WordPress core, plugins, themes, and database operations through the unified `make wp` target:
 
 ```bash
-docker run -d \
-  -p 8080:8080 \
-  -e DATABASE_URL=mysql://user:pass@host:3306/dbname \
-  -e WP_HOME=https://mysite.com \
-  -e WP_SITEURL=https://mysite.com/wp \
-  -e AUTH_KEY=... \
-  # ... (all salts)
-  ghcr.io/miguel-devops/bedrock-ship:latest
-```
+# Check WordPress version
+make wp CMD="core version"
 
-See `.env.example` for the full list of environment variables.
+# List installed plugins
+make wp CMD="plugin list"
+
+# Install and activate a plugin
+make wp CMD="plugin install classic-editor --activate"
+
+# Flush object cache
+make wp CMD="cache flush"
+
+# Check database tables
+make wp CMD="db check"
+```
 
 ---
 
-## 🛠️ Customizing
+## 💾 Backup & Disaster Recovery
 
-### Add a theme
+Bedrock Ship includes an automated backup utility (`scripts/3-backup.sh` / `make backup`) that executes non-blocking database exports and compresses media uploads:
 
 ```bash
-composer require wpackagist-theme/your-theme
+make backup
 ```
 
-Then activate it via WP admin or WP-CLI:
+Outputs generated in `./backups/`:
+- `db_YYYY-MM-DD_HH-MM-SS.sql.gz` - Compressed single-transaction MariaDB dump.
+- `uploads_YYYY-MM-DD_HH-MM-SS.tar.gz` - Compressed media uploads archive.
+- `backup_YYYY-MM-DD_HH-MM-SS.sha256` - Cryptographic SHA-256 verification manifest.
+- **Automatic Pruning**: Archives older than 14 days are automatically pruned.
 
-```bash
-docker compose exec app wp theme activate your-theme
-```
-
-### Add plugins
-
-```bash
-composer require wpackagist-plugin/your-plugin
-```
-
-### Add Sage later
-
-When you're ready for Sage:
-
-```bash
-composer require roots/sage
-```
-
-Then extend the `Dockerfile` with a Node.js build stage for asset compilation.
+For complete restoration procedures, see [Disaster Recovery Runbook](docs/runbooks/disaster-recovery.md).
 
 ---
 
-## 🏗️ Project structure
+## 📚 SRE Documentation & Runbooks
 
-```
-├── config/                # Bedrock PHP configuration
-│   ├── application.php    # Base config (DB, URLs, salts)
-│   └── environments/      # Per-environment overrides
-├── web/
-│   ├── wp/                # WordPress core (Composer, not in git)
-│   ├── app/               # Content directory (themes, plugins, uploads)
-│   │   └── mu-plugins/    # Must-use plugins (autoloader, disallow-indexing)
-│   ├── wp-config.php      # Bootstrap (do not edit)
-│   └── index.php          # Front controller
-├── Dockerfile             # Multi-stage production image
-├── docker-compose.yml     # Local dev (app + MariaDB)
-├── scripts/               # Setup, build, backup utilities
-└── .env.example           # Environment template
-```
+Operational, production, and triage runbooks are maintained under [`docs/`](docs/):
+
+- 🚨 [Incident Response Runbook](docs/runbooks/incident-response.md) - Step-by-step triage guide for container crashloops, MariaDB socket exhaustion, backup failures, and PHP error surges.
+- 🔄 [Disaster Recovery Runbook](docs/runbooks/disaster-recovery.md) - Step-by-step restoration procedure for database and media archives with SHA-256 integrity validation.
+- ✅ [Production Deployment Checklist](docs/deployment-checklist.md) - Preflight and production readiness verification covering secrets, TLS termination, cgroups, and backup schedules.
 
 ---
 
-## 🔧 Environment variables
+## ⚙️ Environment Configuration
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `DATABASE_URL` | Yes | `mysql://user:pass@host:port/dbname` |
-| `WP_HOME` | Yes | Site URL (e.g. `https://mysite.com`) |
-| `WP_SITEURL` | Yes | WordPress URL (e.g. `https://mysite.com/wp`) |
-| `WP_ENV` | No | `development`, `staging`, `production` (default) |
-| `AUTH_KEY` - `NONCE_SALT` | Yes | WordPress salts (8 variables) |
-
-See `.env.example` for the complete reference.
-
----
-
-## 🔒 Security
-
-This project follows a coordinated disclosure policy.
-If you discover a vulnerability, **do not open a public issue**.
-See [SECURITY.md](./SECURITY.md) for reporting instructions and response timelines.
-
-### Key security features
-
-- **Rootless container:** runs as `www-data` (UID 82), never as root
-- **OPcache hardened:** timestamp validation disabled in production
-- **File modifications disabled:** `DISALLOW_FILE_MODS` prevents admin panel code edits
-- **Secrets via environment variables:** no credentials in code or config files
-- **Multi-stage Docker build:** no build tools in the final image
-
----
-
-## Credits
-
-This project orchestrates and dockerizes the incredible work of:
-
-- **[Roots.io](https://roots.io)** - Bedrock, Acorn, and the modern WordPress ecosystem
-- **[FrankenPHP](https://frankenphp.dev)** - Kévin Dunglas & contributors
-
----
-
-## 📄 License
-
-Copyright © 2026 Miguel Lozano | Developmi. All rights reserved.
-
-Licensed under the [MIT License](./LICENSE.md).
+| Variable | Required | Default | Description |
+| :--- | :---: | :--- | :--- |
+| `DATABASE_URL` | **Yes** | - | `mysql://user:pass@mariadb:3306/dbname` |
+| `MARIADB_ROOT_PASSWORD`| **Yes** | - | Strong MariaDB root password |
+| `MARIADB_PASSWORD` | **Yes** | - | Strong password for WordPress database user |
+| `MARIADB_DATABASE` | No | `wordpress` | Database schema name |
+| `MARIADB_USER` | No | `wordpress_user` | Application database user |
+| `WP_ENV` | No | `production` | Environment tier (`development`, `staging`, `production`) |
+| `WP_HOME` | No | `http://localhost:8080` | Canonical site URL |
+| `WP_SITEURL` | No | `${WP_HOME}/wp` | WordPress core URL |
+| `AUTH_KEY` to `NONCE_SALT` | **Yes** | - | 8 unique cryptographic salts ([Roots Salt Generator](https://roots.io/salts.html)) |
+| `APP_PORT` | No | `8080` | Host port bound to loopback `127.0.0.1` |
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome. Please read [CONTRIBUTING.md](./CONTRIBUTING.md) before opening a pull request.
-This project follows [Conventional Commits](https://www.conventionalcommits.org/) and the Developmi engineering standard.
+Contributions are welcome! Please review [CONTRIBUTING.md](./CONTRIBUTING.md) and our [Security Policy](./SECURITY.md).
+
+- Commits must adhere to [Conventional Commits](https://www.conventionalcommits.org/).
+- Do not include `Co-Authored-By` or AI attribution trailers.
+- All submissions must pass `make lint` and `make audit`.
 
 ---
 
-## 🤝 Contact & support
+## 📄 License & Support
+
+Copyright © 2026 Miguel Lozano | Developmi. All rights reserved.
+
+Licensed under the [MIT License](./LICENSE.md).
 
 **Maintained by:** Miguel Lozano | Developmi
-
 - **Role:** Cloud & Infrastructure Engineer | FinOps & Bare Metal Specialist | AI Sovereignty Strategist under NIST/DORA Standards
 - **Philosophy:** *Security is not a feature; it is the baseline.*
-- **Project:** [github.com/Miguel-DevOps/bedrock-ship](https://github.com/Miguel-DevOps/bedrock-ship)
 - **Website:** [developmi.com](https://developmi.com)
 - **GitHub:** [Miguel-DevOps](https://github.com/Miguel-DevOps)
 - **LinkedIn:** [Miguel Lozano](https://www.linkedin.com/in/miguel-dev-ops)
-
----
-
-© 2026 Miguel Lozano | Developmi. All rights reserved.
