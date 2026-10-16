@@ -7,12 +7,12 @@
 vendor/
 web/wp/
 
-# WordPress content — installed by Composer, never commit
+# WordPress content - installed by Composer, never commit
 web/app/mu-plugins/
 web/app/plugins/
 web/app/themes/
 
-# WordPress runtime — user-generated at runtime, never commit
+# WordPress runtime - user-generated at runtime, never commit
 web/app/cache/
 web/app/uploads/
 web/app/languages/
@@ -58,7 +58,28 @@ id_ed25519
 .phpunit.result.cache
 .pest-cache
 
-# Supply chain security (generated artifacts — never committed)
+# Supply chain security (generated artifacts - never committed)
 cosign.key
 sbom.*.json
 *.attestation
+
+# Caddy configuration (local active copy vs committed template)
+Caddyfile
+!Caddyfile.example
+
+# Python / uv environment
+.venv/
+
+# Development standalone binaries (managed by tools/install.sh)
+tools/bin/
+
+# AI / Autonomous Agent & Architecture artifacts
+.engram/
+openspec/
+sdd/
+odd/
+rdd/
+atl/
+.agent/
+.claude/
+.gemini/

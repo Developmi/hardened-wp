@@ -12,8 +12,13 @@
 docker-compose*.yml
 Dockerfile*
 
-# Scripts — not needed at runtime
+# Scripts and Dev Tools - not needed at runtime
 scripts/
+tools/
+.venv/
+pyproject.toml
+uv.lock
+.yamllint*
 
 # Docs
 *.md
@@ -24,18 +29,18 @@ docs/
 *.log
 .DS_Store
 
-# Composer dependencies — installed fresh in Stage 1
+# Composer dependencies - installed fresh in Stage 1
 vendor/
 
-# WordPress core — installed by Composer
+# WordPress core - installed by Composer
 web/wp/
 
-# WordPress content — installed by Composer, built fresh in Stage 1
+# WordPress content - installed by Composer, built fresh in Stage 1
 web/app/themes/
 web/app/plugins/
 web/app/mu-plugins/
 
-# Runtime state — must be volumes at deploy time
+# Runtime state - must be volumes at deploy time
 web/app/uploads/
 web/app/cache/
 web/app/languages/
@@ -74,7 +79,7 @@ backups/
 *.sql.gz
 *.dump
 
-# Supply chain security (generated — never in image)
+# Supply chain security (generated - never in image)
 cosign.key
 *.attestation
 sbom.*.json
