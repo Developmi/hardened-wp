@@ -58,14 +58,22 @@ jobs:
           test -n "$LATEST_CHECKSUM"
           (cd backups && sha256sum -c "$(basename "$LATEST_CHECKSUM")")
 
-      - name: Run Trivy container scan
-        uses: aquasecurity/trivy-action@18f2510ee396bbf400402947b394f2dd8c87dbb0 # v0.29.0
+      - name: Install Trivy
+        uses: aquasecurity/setup-trivy@81e514348e19b6112ce2a7e3ecbafe19c1e1f567 # v0.3.1
         with:
-          image-ref: developmi/hardened-wp:local
-          format: table
-          exit-code: '1'
-          ignore-unfixed: true
-          severity: CRITICAL,HIGH
+          version: v0.76.0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run Trivy container scan
+        run: |
+          trivy image \
+            --config .trivyignore \
+            --exit-code 1 \
+            --severity CRITICAL,HIGH \
+            --ignore-unfixed \
+            --pkg-types os,library \
+            --scanners vuln \
+            developmi/hardened-wp:local
 
       - name: Tear down stack
         if: always()

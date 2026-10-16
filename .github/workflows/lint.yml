@@ -20,6 +20,11 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Install uv
+        uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          enable-cache: false
+
       - name: Setup PHP
         uses: shivammathur/setup-php@d52fc211a0436f8839a587b3b5b8efddab4744ea # v2
         with:
@@ -48,11 +53,17 @@ jobs:
           install -m 0755 /tmp/hadolint /usr/local/bin/hadolint
           rm -f /tmp/hadolint
 
+      - name: Sync Python dependencies
+        run: uv sync --frozen
+
+      - name: Lint YAML
+        run: uv run yamllint .
+
       - name: Lint GitHub Actions
         run: actionlint
 
       - name: Lint GitHub Actions security (zizmor)
-        run: uvx zizmor .
+        run: uv run zizmor .
 
       - name: Lint Dockerfile
         run: hadolint --ignore DL3025 --failure-threshold warning Dockerfile
