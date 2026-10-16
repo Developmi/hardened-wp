@@ -1,0 +1,31 @@
+{
+	frankenphp
+}
+
+{$SERVER_NAME:localhost} {
+	root * /app/web
+	encode zstd br gzip
+
+	header {
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "SAMEORIGIN"
+		Referrer-Policy "strict-origin-when-cross-origin"
+	}
+
+	# Disallow PHP execution in uploads and block sensitive files
+	@blocked {
+		path /app/uploads/*.php /app/uploads/*/*.php
+		path /wp-config.php /wp-config-sample.php
+		path /xmlrpc.php /wp/xmlrpc.php
+		path *.sql *.sql.gz *.tar.gz *.bak *.log *.sh *.env
+		path */.*
+	}
+	error @blocked 403
+
+	# Liveness health check probe endpoint
+	handle /healthz {
+		respond "OK" 200
+	}
+
+	php_server
+}
