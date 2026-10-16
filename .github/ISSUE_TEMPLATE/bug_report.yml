@@ -1,0 +1,55 @@
+name: Bug report
+description: Report a problem with Bedrock Ship, configuration, or runtime behavior
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report an issue. Please verify
+        `CHANGELOG.md` first to confirm the issue has not already been resolved.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: A clear and concise description of the bug.
+    validations:
+      required: true
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Minimal configuration and exact commands to reproduce the issue.
+      placeholder: |
+        1. Run `make dev`
+        2. Execute ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected-vs-actual
+    attributes:
+      label: Expected vs Actual Behavior
+      description: What did you expect to happen, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment Details
+      description: Operating System, Docker version, Compose version, and architecture.
+      placeholder: |
+        - OS: Ubuntu 24.04 LTS (x86_64 / arm64)
+        - Docker Version: 27.x / 28.x
+        - Docker Compose Version: 2.x
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs
+      description: Output of `make logs-app`, `make logs-db`, or container stack traces.
+      render: shell
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Any extra details, custom `.env` overrides, installed WordPress plugins, or screenshots.
