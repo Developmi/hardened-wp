@@ -1,0 +1,13 @@
+[project]
+name = "hardened-wp"
+version = "2.0.0"
+description = "Production-ready WordPress Docker image - Bedrock + FrankenPHP + Acorn, rootless and lightweight"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "yamllint>=1.38.0",
+    "zizmor>=1.31.1",
+]

@@ -3,43 +3,78 @@ services:
   # WordPress + Bedrock + FrankenPHP
   # ==========================================
   app:
+    image: developmi/hardened-wp:local
     build:
       context: .
       dockerfile: Dockerfile
     container_name: bedrock_app
     restart: unless-stopped
+    security_opt:
+      - "no-new-privileges:true"
+    deploy:
+      resources:
+        limits:
+          cpus: "1.5"
+          memory: 512M
+          pids: 100
     environment:
       WP_ENV: ${WP_ENV:-production}
       WP_HOME: ${WP_HOME:-http://localhost:8080}
       WP_SITEURL: ${WP_SITEURL:-http://localhost:8080/wp}
-      DATABASE_URL: ${DATABASE_URL:-mysql://wordpress_user:wordpress_password@mariadb:3306/wordpress}
-      AUTH_KEY: ${AUTH_KEY:-}
-      SECURE_AUTH_KEY: ${SECURE_AUTH_KEY:-}
-      LOGGED_IN_KEY: ${LOGGED_IN_KEY:-}
-      NONCE_KEY: ${NONCE_KEY:-}
-      AUTH_SALT: ${AUTH_SALT:-}
-      SECURE_AUTH_SALT: ${SECURE_AUTH_SALT:-}
-      LOGGED_IN_SALT: ${LOGGED_IN_SALT:-}
-      NONCE_SALT: ${NONCE_SALT:-}
+      DATABASE_URL: "${DATABASE_URL:?Error: DATABASE_URL is required in .env}"
+      AUTH_KEY: "${AUTH_KEY:?Error: AUTH_KEY is required in .env}"
+      SECURE_AUTH_KEY: "${SECURE_AUTH_KEY:?Error: SECURE_AUTH_KEY is required in .env}"
+      LOGGED_IN_KEY: "${LOGGED_IN_KEY:?Error: LOGGED_IN_KEY is required in .env}"
+      NONCE_KEY: "${NONCE_KEY:?Error: NONCE_KEY is required in .env}"
+      AUTH_SALT: "${AUTH_SALT:?Error: AUTH_SALT is required in .env}"
+      SECURE_AUTH_SALT: "${SECURE_AUTH_SALT:?Error: SECURE_AUTH_SALT is required in .env}"
+      LOGGED_IN_SALT: "${LOGGED_IN_SALT:?Error: LOGGED_IN_SALT is required in .env}"
+      NONCE_SALT: "${NONCE_SALT:?Error: NONCE_SALT is required in .env}"
+    volumes:
+      - wp_uploads:/app/web/app/uploads
     ports:
-      - "${APP_PORT:-8080}:8080"
+      - "127.0.0.1:${APP_PORT:-8080}:8080"
+    networks:
+      - internal
     depends_on:
-      - mariadb
+      mariadb:
+        condition: service_healthy
 
   # ==========================================
-  # Database — MariaDB 11.4
+  # Database - MariaDB 11.4
   # ==========================================
   mariadb:
     image: mariadb:11.4
     container_name: bedrock_db
     restart: unless-stopped
+    security_opt:
+      - "no-new-privileges:true"
+    deploy:
+      resources:
+        limits:
+          cpus: "1.5"
+          memory: 1024M
+          pids: 150
     environment:
       MARIADB_DATABASE: ${MARIADB_DATABASE:-wordpress}
-      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:-root}
+      MARIADB_ROOT_PASSWORD: "${MARIADB_ROOT_PASSWORD:?Error: MARIADB_ROOT_PASSWORD is required in .env}"
       MARIADB_USER: ${MARIADB_USER:-wordpress_user}
-      MARIADB_PASSWORD: ${MARIADB_PASSWORD:-wordpress_password}
+      MARIADB_PASSWORD: "${MARIADB_PASSWORD:?Error: MARIADB_PASSWORD is required in .env}"
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb-admin ping -h localhost -u root -p\"$$MARIADB_ROOT_PASSWORD\" --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     volumes:
       - db_data:/var/lib/mysql
+    networks:
+      - internal
 
 volumes:
   db_data:
+  wp_uploads:
+
+networks:
+  internal:
+    driver: bridge

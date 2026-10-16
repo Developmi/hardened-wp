@@ -1,0 +1,33 @@
+name: Feature request
+description: Suggest an enhancement or new capability for Bedrock Ship
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting an enhancement. Please search open and closed issues
+        as well as `CHANGELOG.md` before submitting.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Description / Motivation
+      description: What problem are you trying to solve or what gap does this address?
+    validations:
+      required: true
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed Solution
+      description: How should this work? Please keep it concrete, secure, and testable.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: What other approaches or workarounds did you evaluate, and why do they fall short?
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Impact on security posture, backwards compatibility, documentation, or operational burden.

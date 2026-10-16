@@ -8,11 +8,11 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
-echo "🚀 Bedrock Docker — Development Setup"
+echo "🚀 Bedrock Docker - Development Setup"
 echo ""
 
 # ═══════════════════════════════════════════════════════════════════════════
-# 1. VALIDATE .env
+# 1. VALIDATE .env AND Caddyfile
 # ═══════════════════════════════════════════════════════════════════════════
 
 if [ ! -f .env ]; then
@@ -26,6 +26,13 @@ fi
 
 echo "✅ .env file found"
 
+if [ ! -f Caddyfile ]; then
+    echo -e "${YELLOW}⚠️ Caddyfile not found, creating from Caddyfile.example...${NC}"
+    cp Caddyfile.example Caddyfile
+fi
+
+echo "✅ Caddyfile ready"
+
 # Validate required variables exist
 REQUIRED_VARS=("MARIADB_ROOT_PASSWORD" "DATABASE_URL")
 for var in "${REQUIRED_VARS[@]}"; do
@@ -36,6 +43,18 @@ for var in "${REQUIRED_VARS[@]}"; do
 done
 
 echo "✅ Required environment variables present"
+
+get_env_value() {
+    local key="$1"
+    awk -F= -v k="$key" '
+        $1==k {
+            sub(/^[[:space:]]+|[[:space:]]+$/, "", $2)
+            gsub(/^"|"$/, "", $2)
+            gsub(/^'\''|'\''$/, "", $2)
+            print $2
+            exit
+        }' .env
+}
 
 # ═══════════════════════════════════════════════════════════════════════════
 # 2. VALIDATE DOCKER
@@ -75,7 +94,7 @@ RETRY_COUNT=0
 until docker compose exec -T mariadb \
     mariadb-admin ping \
     -u root \
-    -p"$(grep MARIADB_ROOT_PASSWORD .env | cut -d= -f2)" \
+    -p"$(get_env_value MARIADB_ROOT_PASSWORD)" \
     --silent >/dev/null 2>&1; do
 
     RETRY_COUNT=$((RETRY_COUNT + 1))
