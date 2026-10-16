@@ -67,12 +67,11 @@ jobs:
       - name: Run Trivy container scan
         run: |
           trivy image \
-            --config .trivyignore \
-            --exit-code 1 \
+            --scanners vuln \
             --severity CRITICAL,HIGH \
             --ignore-unfixed \
-            --pkg-types os,library \
-            --scanners vuln \
+            --skip-version-check \
+            --exit-code 1 \
             developmi/hardened-wp:local
 
       - name: Tear down stack

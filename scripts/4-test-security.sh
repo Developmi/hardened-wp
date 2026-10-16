@@ -49,7 +49,7 @@ fi
 # 2. RUNTIME LIFECYCLE MANAGEMENT (EPHEMERAL vs LIVE)
 # ═══════════════════════════════════════════════════════════════════════════
 
-# shellcheck disable=SC2329 # Invoked indirectly via trap
+# shellcheck disable=SC2317,SC2329 # Invoked indirectly via trap
 cleanup() {
     if [ "${WAS_RUNNING:-0}" -eq 0 ]; then
         echo -e "\n${BLUE}🧹 Cleaning up ephemeral test stack...${NC}"

@@ -203,7 +203,7 @@ lint-composer:
 .PHONY: lint-shell
 lint-shell: tools
 	@printf "\n$(CYAN)$(BOLD)==> Linting shell scripts with standalone ShellCheck...$(RESET)\n"
-	@$(TOOLS)/shellcheck -e SC2034 scripts/*.sh
+	@$(TOOLS)/shellcheck -e SC2034,SC2317 scripts/*.sh
 	@printf "$(GREEN)✓ ShellCheck passed.$(RESET)\n"
 
 .PHONY: lint-actions

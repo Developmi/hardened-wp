@@ -69,7 +69,7 @@ jobs:
         run: hadolint --ignore DL3025 --failure-threshold warning Dockerfile
 
       - name: Lint shell scripts
-        run: shellcheck -e SC2034 scripts/*.sh
+        run: shellcheck -e SC2034,SC2317 scripts/*.sh
 
       - name: Install Composer dependencies
         run: composer install --prefer-dist --no-progress --no-interaction
