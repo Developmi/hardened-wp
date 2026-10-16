@@ -1,7 +1,7 @@
 # ==========================================
 # Stage 1: PHP Dependencies (Composer)
 # ==========================================
-FROM composer:2.8@sha256:5248900ab8b5f7f880c2d62180e40960cd87f60149ec9a1abfd62ac72a02577c AS php-builder
+FROM composer:2.10@sha256:af98f42dfff7c68ba8d53c2164fd9fde1087b7d449514baa38c418b1f6bc4bac AS php-builder
 WORKDIR /app
 
 COPY composer.json composer.lock ./
