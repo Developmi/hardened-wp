@@ -1,7 +1,7 @@
 # ==========================================
 # Stage 1: PHP Dependencies (Composer)
 # ==========================================
-FROM composer:2.10@sha256:af98f42dfff7c68ba8d53c2164fd9fde1087b7d449514baa38c418b1f6bc4bac AS php-builder
+FROM composer:2.10@sha256:b6dcd72ca98fa19d0e5b8476de179859704891fad06dd9e0b96833d4c430a5fc AS php-builder
 WORKDIR /app
 
 COPY composer.json composer.lock ./
@@ -19,7 +19,7 @@ RUN composer dump-autoload --optimize --classmap-authoritative --no-dev
 # ==========================================
 # Stage 2: Production Image (FrankenPHP)
 # ==========================================
-FROM dunglas/frankenphp:1-php8.3-alpine@sha256:5babd75547a7dbbc424fa5e2d3566d5bd46173ed0fe09f17fe7f9e9001b2b936
+FROM dunglas/frankenphp:1-php8.3-alpine@sha256:d945d1efb0400769ac1a2796b2af29899d8ecc1558df46cff45f9cb864963918
 
 # PHP extensions required by WordPress + Bedrock + Acorn
 RUN install-php-extensions \
@@ -32,7 +32,7 @@ RUN install-php-extensions \
     exif
 
 # WP-CLI from official WordPress CLI image
-COPY --from=wordpress:cli-php8.3@sha256:36243da432a0f0a3b56dc3240ecee9b159108d71305e7c064d987a20a465bfde /usr/local/bin/wp /usr/local/bin/wp
+COPY --from=wordpress:cli-php8.3@sha256:661db880e953da051abcac6c0a769767b995a82cd52101c003ca7438dd427d7d /usr/local/bin/wp /usr/local/bin/wp
 
 WORKDIR /app
 COPY --from=php-builder /app /app
