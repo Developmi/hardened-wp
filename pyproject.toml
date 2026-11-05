@@ -8,6 +8,17 @@ dependencies = []
 
 [dependency-groups]
 dev = [
+    "mypy==1.15.0",
+    "ruff==0.9.10",
     "yamllint>=1.38.0",
     "zizmor>=1.31.1",
 ]
+
+[tool.ruff]
+line-length = 100
+target-version = "py314"
+
+[tool.mypy]
+python_version = "3.14"
+strict = true
+

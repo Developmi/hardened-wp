@@ -21,8 +21,9 @@ RUN composer dump-autoload --optimize --classmap-authoritative --no-dev
 # ==========================================
 FROM dunglas/frankenphp:1-php8.3-alpine@sha256:d945d1efb0400769ac1a2796b2af29899d8ecc1558df46cff45f9cb864963918
 
-# PHP extensions required by WordPress + Bedrock + Acorn
-RUN install-php-extensions \
+# System security updates & PHP extensions required by WordPress + Bedrock + Acorn
+RUN apk upgrade --no-cache curl libcurl \
+ && install-php-extensions \
     mysqli \
     pdo_mysql \
     gd \
