@@ -1,7 +1,8 @@
-# Git
+# Version Control & CI/CD
 .git
 .gitignore
 .gitattributes
+.github
 
 # Environment (keep .env.example as template)
 .env
@@ -16,6 +17,13 @@ Dockerfile*
 scripts/
 tools/
 .venv/
+.uv/
+__pycache__/
+*.py[cod]
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
 pyproject.toml
 uv.lock
 .yamllint*
@@ -83,3 +91,15 @@ backups/
 cosign.key
 *.attestation
 sbom.*.json
+
+# AI Tooling & Task Tracking Metadata
+odd/
+.engram/
+openspec/
+sdd/
+rdd/
+atl/
+.agent/
+.claude/
+.gemini/
+.codegraph/

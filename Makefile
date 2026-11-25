@@ -51,6 +51,7 @@ help:
 	@printf "  $(GREEN)audit$(RESET)          Audit Composer dependencies for known vulnerabilities\n"
 	@printf "  $(GREEN)test$(RESET)           Run security test suite (intelligent ephemeral lifecycle)\n"
 	@printf "  $(GREEN)test-security$(RESET)  Run standalone Trivy security scan against $(IMAGE_NAME):local\n"
+	@printf "  $(GREEN)release-ready$(RESET)  Run full preflight verification gate (lint, audit, build, scan, test)\n"
 	@printf "\n$(CYAN)$(BOLD)Utilities$(RESET)\n"
 	@printf "  $(GREEN)cli$(RESET)            Open interactive shell inside application container as www-data\n"
 	@printf "  $(GREEN)wp$(RESET)             Run WP-CLI command (e.g. make wp CMD=\"core version\")\n"
@@ -253,8 +254,13 @@ test-security: tools
 		printf "$(YELLOW)⚠️ Image $(IMAGE_NAME):local not found. Building first...$(RESET)\n"; \
 		$(MAKE) build; \
 	fi
-	@$(TOOLS)/trivy image --exit-code 1 --severity HIGH,CRITICAL --ignore-unfixed $(IMAGE_NAME):local
+	@$(TOOLS)/trivy image --exit-code 1 --severity HIGH,CRITICAL --ignore-unfixed --vex openvex.json $(IMAGE_NAME):local
 	@printf "$(GREEN)✓ Trivy container scan passed (0 HIGH, 0 CRITICAL).$(RESET)\n\n"
+
+.PHONY: check release-ready
+check: release-ready
+release-ready: lint audit build test-security test
+	@printf "\n$(GREEN)$(BOLD)✓ Release readiness verified. All linters, audits, container scans, and runtime security tests passed.$(RESET)\n\n"
 
 .PHONY: backup
 backup:

@@ -1,0 +1,35 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-hardened-wp-v2.0.2",
+  "author": "Miguel Lozano | Developmi (miguel@developmi.com)",
+  "timestamp": "2026-11-24T20:00:00Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2026-78661"
+      },
+      "products": [
+        {
+          "@id": "pkg:golang/golang.org/x/net@v0.61.0"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "FrankenPHP runtime streams HTTP responses directly without parsing untrusted HTML payloads through golang.org/x/net/html."
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2026-116587"
+      },
+      "products": [
+        {
+          "@id": "pkg:golang/github.com/go-jose/go-jose/v3@v3.0.5"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_cannot_be_controlled_by_adversary",
+      "impact_statement": "go-jose v3 is utilized strictly by Caddy/certmagic for ACME protocol interactions with trusted certificate authorities (Let's Encrypt), never exposed to untrusted client JWK input."
+    }
+  ]
+}

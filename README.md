@@ -6,6 +6,7 @@
 
 *Hardened, enterprise-grade WordPress distribution built on Roots Bedrock and FrankenPHP in a secure container runtime.*
 
+[![Version](https://img.shields.io/badge/Version-2.0.3-blue?style=for-the-badge)](https://github.com/Developmi/hardened-wp/releases)
 [![PHP 8.3](https://img.shields.io/badge/PHP_8.3-777BB4?style=for-the-badge&logo=php&logoColor=white)](https://www.php.net/)
 [![FrankenPHP](https://img.shields.io/badge/FrankenPHP-FFD93C?style=for-the-badge&logo=caddy&logoColor=black)](https://frankenphp.dev/)
 [![Bedrock Roots](https://img.shields.io/badge/Bedrock-Roots.io-525DDC?style=for-the-badge)](https://roots.io/bedrock/)
@@ -29,10 +30,11 @@
   - [🎯 Overview](#-overview)
   - [🏗️ Architecture](#️-architecture)
   - [🔒 Security Hardening Posture](#-security-hardening-posture)
+  - [💰 FinOps \& Operational Cost Advantage](#-finops--operational-cost-advantage)
   - [⚡ Quick Start](#-quick-start)
     - [Prerequisites](#prerequisites)
     - [1. Clone \& Diagnose](#1-clone--diagnose)
-    - [2. Configure Environment](#2-configure-environment)
+    - [2. Configure Environment \& Web Server](#2-configure-environment--web-server)
     - [3. Launch Development Stack](#3-launch-development-stack)
     - [4. Verify Health Probe](#4-verify-health-probe)
     - [5. Access Application](#5-access-application)
@@ -41,6 +43,12 @@
   - [💾 Backup \& Disaster Recovery](#-backup--disaster-recovery)
   - [📚 SRE Documentation \& Runbooks](#-sre-documentation--runbooks)
   - [⚙️ Environment Configuration](#️-environment-configuration)
+  - [🗺️ Roadmap](#️-roadmap)
+    - [🟢 Phase 1: Hardening \& Supply Chain Trust (v2.0.x — Current)](#-phase-1-hardening--supply-chain-trust-v20x--current)
+    - [🟡 Phase 2: Distributed Media \& Caching (v2.1.0 — In Progress)](#-phase-2-distributed-media--caching-v210--in-progress)
+    - [🔵 Phase 3: Enterprise Orchestration (v2.2.0 — Planned)](#-phase-3-enterprise-orchestration-v220--planned)
+  - [📋 Changelog](#-changelog)
+  - [🔒 Security Policy](#-security-policy)
   - [🤝 Contributing](#-contributing)
   - [📄 License \& Support](#-license--support)
 
@@ -89,7 +97,7 @@ flowchart TD
 
 ## 🔒 Security Hardening Posture
 
-Bedrock Ship incorporates multi-tier defense-in-depth controls across supply chain, container runtime, network perimeter, and filesystem:
+Hardened WP incorporates multi-tier defense-in-depth controls across supply chain, container runtime, network perimeter, and filesystem:
 
 | Security Vector | Implementation Detail | Operational Benefit |
 | :--- | :--- | :--- |
@@ -102,6 +110,19 @@ Bedrock Ship incorporates multi-tier defense-in-depth controls across supply cha
 | **Base Image Immutability** | Multi-stage stages digest-pinned to immutable `@sha256:...` digests | Guarantees deterministic, tamper-proof reproducible container builds. |
 | **Supply Chain Assurance** | Keyless Cosign OIDC signing and CycloneDX SBOM generation | Verifiable origin, non-repudiation, and transparent dependency audit. |
 | **Liveness Probing** | Dedicated `/healthz` endpoint returning `200 OK` | Zero-overhead uptime checks without hitting PHP worker processes. |
+
+---
+
+## 💰 FinOps & Operational Cost Advantage
+
+Hardened WP is engineered for capital efficiency and infrastructure sovereignty, enabling a complete cloud exit from proprietary managed container platforms and databases:
+
+| Cost Dimension | Public Cloud (AWS ECS + RDS MariaDB) | Sovereign VPS / Bare Metal (Hardened WP) | Financial Impact |
+| :--- | :--- | :--- | :--- |
+| **Runtime Compute** | AWS Fargate (2 vCPU, 4GB RAM) ~$60/mo | Dedicated VPS (4 vCPU, 8GB RAM) ~$12/mo | **80% OpEx Reduction** |
+| **Managed Database** | Amazon RDS MariaDB db.t4g.small ~$35/mo | Co-located MariaDB 11.4 container ($0/mo) | **100% OpEx Reduction** |
+| **Data Egress** | Variable data transfer fees ($0.09/GB) | 20TB–Unlimited included egress | Predictable flat-rate budgeting |
+| **Estimated Monthly** | **~$95–$140 / mo** | **~$12–$20 / mo** | **~75–85% documented savings** |
 
 ---
 
@@ -171,6 +192,7 @@ make help
 | | `make audit` | Audit Composer dependencies for known CVEs (`composer audit`) |
 | | `make test` | Probe application liveness endpoint (`/healthz`) |
 | | `make test-security` | Scan local image for CRITICAL and HIGH CVEs with Trivy |
+| | `make release-ready` | Run comprehensive release gate (`lint`, `audit`, `build`, `test-security`, `test`) |
 | **Utilities** | `make cli` | Open interactive shell inside application container |
 | | `make wp CMD="..."` | Execute WP-CLI command (e.g. `make wp CMD="core version"`) |
 | | `make backup` | Execute database + uploads backup with SHA-256 manifest |
@@ -202,7 +224,7 @@ make wp CMD="db check"
 
 ## 💾 Backup & Disaster Recovery
 
-Bedrock Ship includes an automated backup utility (`scripts/3-backup.sh` / `make backup`) that executes non-blocking database exports and compresses media uploads:
+Hardened WP includes an automated backup utility (`scripts/3-backup.sh` / `make backup`) that executes non-blocking database exports and compresses media uploads:
 
 ```bash
 make backup
@@ -242,6 +264,46 @@ Operational, production, and triage runbooks are maintained under [`docs/`](docs
 | `WP_SITEURL` | No | `${WP_HOME}/wp` | WordPress core URL |
 | `AUTH_KEY` to `NONCE_SALT` | **Yes** | - | 8 unique cryptographic salts ([Roots Salt Generator](https://roots.io/salts.html)) |
 | `APP_PORT` | No | `8080` | Host port bound to loopback `127.0.0.1` |
+
+---
+
+## 🗺️ Roadmap
+
+Hardened WP follows a transparent, phased evolution focusing on sovereign infrastructure, security engineering, and enterprise operational resilience:
+
+### 🟢 Phase 1: Hardening & Supply Chain Trust (v2.0.x — Current)
+- [x] **Rootless Runtime**: FrankenPHP container executed under numeric non-root UID/GID `82:82` (`www-data:www-data`).
+- [x] **Database Hardening**: MariaDB 11.4 LTS pinned to multi-arch immutable digest (`sha256:...`).
+- [x] **Keyless Signing**: OIDC Cosign container image signing on GHCR releases.
+- [x] **CycloneDX SBOM & OpenVEX**: Automated SBOM generation and OpenVEX justifications (`openvex.json`) for unpatchable upstream dependencies.
+- [x] **CI/CD Hardening**: Top-level read-only permissions, 100% 40-character commit SHA action pinning, and runner pinning to `ubuntu-24.04`.
+- [x] **Release Readiness Gate**: Deterministic local and CI preflight verification target (`make release-ready`).
+- [x] **FinOps Documentation**: Documented ~75–85% cost reduction metrics over hyperscaler managed container stacks.
+
+### 🟡 Phase 2: Distributed Media & Caching (v2.1.0 — In Progress)
+- [ ] **S3 Object Storage Driver**: Native integration with MinIO, Cloudflare R2, and AWS S3 for stateless media offloading.
+- [ ] **Redis Object Caching**: Co-located high-performance Redis cache service with persistent socket configuration.
+- [ ] **Multi-Domain TLS Orchestration**: Automated Let's Encrypt / ZeroSSL certificate issuance via FrankenPHP Caddy ingress.
+
+### 🔵 Phase 3: Enterprise Orchestration (v2.2.0 — Planned)
+- [ ] **Production Helm Charts**: Cloud-native deployment charts for Kubernetes / K3s under Restricted Pod Security Standards.
+- [ ] **OpenTelemetry (OTel) Instrumentation**: Distributed tracing and metrics exporter for PHP worker processes and SQL query timings.
+- [ ] **Automated Media Quarantine**: ClamAV integration for incoming media uploads scanning before filesystem persistence.
+
+---
+
+## 📋 Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for full version history, release notes, and migration guides.
+The project strictly adheres to [Keep a Changelog](https://keepachangelog.com/) and [Semantic Versioning](https://semver.org/).
+
+---
+
+## 🔒 Security Policy
+
+This project follows a coordinated vulnerability disclosure policy.
+If you discover a security vulnerability, **do not open a public issue**.
+Please review [SECURITY.md](./SECURITY.md) for reporting channels and response timelines.
 
 ---
 

@@ -41,10 +41,10 @@ services:
         condition: service_healthy
 
   # ==========================================
-  # Database - MariaDB 11.4
+  # Database - MariaDB 11.4 (LTS until May 2029)
   # ==========================================
   mariadb:
-    image: mariadb:11.4
+    image: mariadb:11.4@sha256:a8992b5e5404d11e03c54a31d0c1bdea3fd116d283aa6d1a627551f29045309b
     container_name: bedrock_db
     restart: unless-stopped
     security_opt:

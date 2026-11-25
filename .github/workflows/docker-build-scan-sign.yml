@@ -15,6 +15,10 @@ concurrency:
   # Releases must never be cut mid-flight; a newer run on the same ref waits.
   cancel-in-progress: false
 
+# Workflow-level permissions are the floor, never the ceiling.
+permissions:
+  contents: read
+
 jobs:
   # Runs on pull requests AND tag pushes. Least-privilege: read-only contents
   # scope. Builds amd64 + arm64 into the local daemon, then gates the push on
@@ -22,7 +26,7 @@ jobs:
   # granted on a pull_request context, so no SARIF upload to Code Scanning.
   scan:
     name: Build and scan
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       contents: read
     timeout-minutes: 45
@@ -76,7 +80,7 @@ jobs:
       - name: Install Trivy
         uses: aquasecurity/setup-trivy@81e514348e19b6112ce2a7e3ecbafe19c1e1f567 # v0.3.1
         with:
-          version: v0.75.0
+          version: v0.76.0
           cache: true
 
       - name: Generate Trivy SARIF reports (amd64 + arm64)
@@ -86,6 +90,7 @@ jobs:
             --scanners vuln \
             --severity CRITICAL,HIGH \
             --ignore-unfixed \
+            --vex openvex.json \
             --skip-version-check \
             --format sarif \
             --output trivy-results.sarif \
@@ -94,6 +99,7 @@ jobs:
             --scanners vuln \
             --severity CRITICAL,HIGH \
             --ignore-unfixed \
+            --vex openvex.json \
             --skip-version-check \
             --format sarif \
             --output trivy-results-arm64.sarif \
@@ -105,6 +111,7 @@ jobs:
             --scanners vuln \
             --severity CRITICAL,HIGH \
             --ignore-unfixed \
+            --vex openvex.json \
             --skip-version-check \
             --exit-code 1 \
             "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}-scan"
@@ -112,6 +119,7 @@ jobs:
             --scanners vuln \
             --severity CRITICAL,HIGH \
             --ignore-unfixed \
+            --vex openvex.json \
             --skip-version-check \
             --exit-code 1 \
             "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}-scan-arm64"
@@ -135,7 +143,7 @@ jobs:
     name: Publish multi-arch image
     needs: [scan]
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       contents: read
       packages: write
@@ -159,7 +167,7 @@ jobs:
         uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
 
       - name: Login to GHCR
-        uses: docker/login-action@81c6f93d4bc991e510b342a00b419b3bb4efc5c6 # v4.7.0
+        uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
@@ -207,7 +215,7 @@ jobs:
           upload-release-assets: false
 
       - name: Install Cosign
-        uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
+        uses: sigstore/cosign-installer@756fe2d284c7292c4e9b62c8a28f1e5629c59532 # v4.1.3
 
       - name: Sign image by digest (keyless OIDC)
         if: steps.build-push.outputs.digest != ''
@@ -260,7 +268,7 @@ jobs:
       - name: Upload Trivy SARIF (amd64)
         if: (!cancelled()) && steps.build-push.outputs.digest != ''
         continue-on-error: true
-        uses: github/codeql-action/upload-sarif@eec0bff2f6c15bf3f1e8a0152f94d17664a06a06 # v4
+        uses: github/codeql-action/upload-sarif@0911ee96d2d6c8def97122c36c5cadd93829a4b4 # v4
         with:
           sarif_file: trivy-sarif/trivy-results.sarif
           category: trivy
@@ -268,7 +276,7 @@ jobs:
       - name: Upload Trivy SARIF (arm64)
         if: (!cancelled()) && steps.build-push.outputs.digest != ''
         continue-on-error: true
-        uses: github/codeql-action/upload-sarif@eec0bff2f6c15bf3f1e8a0152f94d17664a06a06 # v4
+        uses: github/codeql-action/upload-sarif@0911ee96d2d6c8def97122c36c5cadd93829a4b4 # v4
         with:
           sarif_file: trivy-sarif/trivy-results-arm64.sarif
           category: trivy-arm64
