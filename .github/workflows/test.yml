@@ -70,6 +70,7 @@ jobs:
             --scanners vuln \
             --severity CRITICAL,HIGH \
             --ignore-unfixed \
+            --vex openvex.json \
             --skip-version-check \
             --exit-code 1 \
             developmi/hardened-wp:local

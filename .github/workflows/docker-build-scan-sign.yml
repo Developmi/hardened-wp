@@ -76,7 +76,7 @@ jobs:
       - name: Install Trivy
         uses: aquasecurity/setup-trivy@81e514348e19b6112ce2a7e3ecbafe19c1e1f567 # v0.3.1
         with:
-          version: v0.75.0
+          version: v0.76.0
           cache: true
 
       - name: Generate Trivy SARIF reports (amd64 + arm64)
@@ -86,6 +86,7 @@ jobs:
             --scanners vuln \
             --severity CRITICAL,HIGH \
             --ignore-unfixed \
+            --vex openvex.json \
             --skip-version-check \
             --format sarif \
             --output trivy-results.sarif \
@@ -94,6 +95,7 @@ jobs:
             --scanners vuln \
             --severity CRITICAL,HIGH \
             --ignore-unfixed \
+            --vex openvex.json \
             --skip-version-check \
             --format sarif \
             --output trivy-results-arm64.sarif \
@@ -105,6 +107,7 @@ jobs:
             --scanners vuln \
             --severity CRITICAL,HIGH \
             --ignore-unfixed \
+            --vex openvex.json \
             --skip-version-check \
             --exit-code 1 \
             "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}-scan"
@@ -112,6 +115,7 @@ jobs:
             --scanners vuln \
             --severity CRITICAL,HIGH \
             --ignore-unfixed \
+            --vex openvex.json \
             --skip-version-check \
             --exit-code 1 \
             "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}-scan-arm64"
