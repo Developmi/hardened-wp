@@ -41,12 +41,17 @@ Thumbs.db
 # Secrets / keys / certs
 *.pem
 *.key
+*.pub
+cosign.pub
+age/keys.txt
 *.crt
 *.p12
 *.pfx
 *.kubeconfig
 id_rsa
+id_rsa.pub
 id_ed25519
+id_ed25519.pub
 .ssh/
 .envrc
 
@@ -67,8 +72,15 @@ sbom.*.json
 Caddyfile
 !Caddyfile.example
 
-# Python / uv environment
+# Python / uv environment & linter caches
 .venv/
+.uv/
+__pycache__/
+*.py[cod]
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
 
 # Development standalone binaries (managed by tools/install.sh)
 tools/bin/
