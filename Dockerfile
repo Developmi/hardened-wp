@@ -58,7 +58,7 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
 
 LABEL org.opencontainers.image.title="hardened-wp" \
       org.opencontainers.image.description="Hardened, enterprise-grade WordPress distribution built on Roots Bedrock and FrankenPHP" \
-      org.opencontainers.image.version="2.0.2" \
+      org.opencontainers.image.version="2.0.3" \
       org.opencontainers.image.source="https://github.com/Developmi/hardened-wp" \
       org.opencontainers.image.licenses="MIT" \
       org.opencontainers.image.authors="Miguel Lozano <miguel@developmi.com>"
