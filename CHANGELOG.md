@@ -23,6 +23,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Pinned all workflow runners to deterministic `ubuntu-24.04` LTS across `docker-build-scan-sign.yml`, `lint.yml`, and `test.yml`.
   - Configured `concurrency:` groups with `cancel-in-progress: true` in `lint.yml` and `test.yml` to prevent duplicate parallel CI runs.
 - **Standard OCI Container Labels**: Updated image metadata in `Dockerfile` with standard OCI labels (`org.opencontainers.image.*`) and bumped version to `2.0.3`.
+- **WordPress Core Engine (`roots/wordpress`)**: Upgraded `roots/wordpress` and `roots/wordpress-no-content` from 7.1.4 to `7.1.5` (consolidates PR #18).
+- **Code Style Tooling (`laravel/pint`)**: Upgraded `laravel/pint` from v1.32.1 to `v1.32.3` (consolidates PR #19).
+- **GitHub Actions Security Bumps**:
+  - Pinned `docker/login-action` to `v4.8.0` (`8aa5831fb8d48d8f76594c7ddde61ae58019f550`, consolidates PR #16).
+  - Pinned `sigstore/cosign-installer` to `v4.1.3` (`756fe2d284c7292c4e9b62c8a28f1e5629c59532`, consolidates PR #17).
+  - Pinned `github/codeql-action/upload-sarif` to `0911ee96d2d6c8def97122c36c5cadd93829a4b4` (consolidates PR #14).
 - **Ignore Standard Alignment**: Synchronized `.dockerignore` and `.gitignore` against master standards to exclude Python caches, task tracking, and cryptographic keys.
 - **Trivy CI Alignment**: Pinned `aquasecurity/setup-trivy` to `v0.76.0` across CI workflows and wired `--vex openvex.json`.
 
