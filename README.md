@@ -29,6 +29,7 @@
   - [🎯 Overview](#-overview)
   - [🏗️ Architecture](#️-architecture)
   - [🔒 Security Hardening Posture](#-security-hardening-posture)
+  - [💰 FinOps & Operational Cost Advantage](#-finops--operational-cost-advantage)
   - [⚡ Quick Start](#-quick-start)
     - [Prerequisites](#prerequisites)
     - [1. Clone \& Diagnose](#1-clone--diagnose)
@@ -89,7 +90,7 @@ flowchart TD
 
 ## 🔒 Security Hardening Posture
 
-Bedrock Ship incorporates multi-tier defense-in-depth controls across supply chain, container runtime, network perimeter, and filesystem:
+Hardened WP incorporates multi-tier defense-in-depth controls across supply chain, container runtime, network perimeter, and filesystem:
 
 | Security Vector | Implementation Detail | Operational Benefit |
 | :--- | :--- | :--- |
@@ -102,6 +103,19 @@ Bedrock Ship incorporates multi-tier defense-in-depth controls across supply cha
 | **Base Image Immutability** | Multi-stage stages digest-pinned to immutable `@sha256:...` digests | Guarantees deterministic, tamper-proof reproducible container builds. |
 | **Supply Chain Assurance** | Keyless Cosign OIDC signing and CycloneDX SBOM generation | Verifiable origin, non-repudiation, and transparent dependency audit. |
 | **Liveness Probing** | Dedicated `/healthz` endpoint returning `200 OK` | Zero-overhead uptime checks without hitting PHP worker processes. |
+
+---
+
+## 💰 FinOps & Operational Cost Advantage
+
+Hardened WP is engineered for capital efficiency and infrastructure sovereignty, enabling a complete cloud exit from proprietary managed container platforms and databases:
+
+| Cost Dimension | Public Cloud (AWS ECS + RDS MariaDB) | Sovereign VPS / Bare Metal (Hardened WP) | Financial Impact |
+| :--- | :--- | :--- | :--- |
+| **Runtime Compute** | AWS Fargate (2 vCPU, 4GB RAM) ~$60/mo | Dedicated VPS (4 vCPU, 8GB RAM) ~$12/mo | **80% OpEx Reduction** |
+| **Managed Database** | Amazon RDS MariaDB db.t4g.small ~$35/mo | Co-located MariaDB 11.4 container ($0/mo) | **100% OpEx Reduction** |
+| **Data Egress** | Variable data transfer fees ($0.09/GB) | 20TB–Unlimited included egress | Predictable flat-rate budgeting |
+| **Estimated Monthly** | **~$95–$140 / mo** | **~$12–$20 / mo** | **~75–85% documented savings** |
 
 ---
 
@@ -171,6 +185,7 @@ make help
 | | `make audit` | Audit Composer dependencies for known CVEs (`composer audit`) |
 | | `make test` | Probe application liveness endpoint (`/healthz`) |
 | | `make test-security` | Scan local image for CRITICAL and HIGH CVEs with Trivy |
+| | `make release-ready` | Run comprehensive release gate (`lint`, `audit`, `build`, `test-security`, `test`) |
 | **Utilities** | `make cli` | Open interactive shell inside application container |
 | | `make wp CMD="..."` | Execute WP-CLI command (e.g. `make wp CMD="core version"`) |
 | | `make backup` | Execute database + uploads backup with SHA-256 manifest |
@@ -202,7 +217,7 @@ make wp CMD="db check"
 
 ## 💾 Backup & Disaster Recovery
 
-Bedrock Ship includes an automated backup utility (`scripts/3-backup.sh` / `make backup`) that executes non-blocking database exports and compresses media uploads:
+Hardened WP includes an automated backup utility (`scripts/3-backup.sh` / `make backup`) that executes non-blocking database exports and compresses media uploads:
 
 ```bash
 make backup

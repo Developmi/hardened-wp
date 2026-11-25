@@ -7,6 +7,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **OpenVEX Governance Document (`openvex.json`)**: Machine-readable VEX statements documenting `not_affected` exploitability justifications for unpatchable upstream Go runtime components (`CVE-2026-78661`, `CVE-2026-116587`).
+- **Preflight Verification Gate (`make release-ready`)**: Deterministic Makefile umbrella target executing `lint`, `audit`, `build`, `test-security`, and integration tests in sequence.
+- **FinOps Documentation**: Documented Bare Metal / VPS operational cost advantages and ~75–85% OpEx reduction metrics in README.
+
+### Changed
+
+- **Container Hardening (`libxml2`)**: Upgraded `libxml2` to `2.13.9-r3` via `apk upgrade` in `Dockerfile`, eliminating `CVE-2026-86144`.
+- **Ignore Standard Alignment**: Synchronized `.dockerignore` and `.gitignore` against master standards to exclude Python caches, task tracking, and cryptographic keys.
+- **Trivy CI Alignment**: Pinned `aquasecurity/setup-trivy` to `v0.76.0` across CI workflows and wired `--vex openvex.json`.
+
+## [2.0.2] - 2026-11-04
+
+### Security
+
+- **Transitive Symfony Security Patches**: Upgraded `symfony/*` components to `v7.4.23`, remediating `CVE-2026-118514`, `CVE-2026-118516`, and `CVE-2026-45070` with zero open advisories (`composer audit`).
+- **Alpine System Patches (`curl`)**: Added `apk upgrade --no-cache curl libcurl` to production runtime image, resolving `CVE-2026-92392`.
+
+### Changed
+
+- **DevSecOps Tooling**: Updated `pyproject.toml` and `uv.lock` pinning `ruff==0.9.10` and `mypy==1.15.0`.
+
+## [2.0.1] - 2026-10-22
+
+### Changed
+
+- **WordPress Core Engine (7.1.4)**: Upgraded `roots/wordpress` to 7.1.4.
+- **CI/CD Action Bumps**: Updated `docker/login-action` to 4.7.0 and `astral-sh/setup-uv` to 10.3.3.
+
 ## [2.0.0] - 2026-10-15
 
 ### Added
