@@ -6,6 +6,7 @@
 
 *Hardened, enterprise-grade WordPress distribution built on Roots Bedrock and FrankenPHP in a secure container runtime.*
 
+[![Version](https://img.shields.io/badge/Version-2.0.3-blue?style=for-the-badge)](https://github.com/Developmi/hardened-wp/releases)
 [![PHP 8.3](https://img.shields.io/badge/PHP_8.3-777BB4?style=for-the-badge&logo=php&logoColor=white)](https://www.php.net/)
 [![FrankenPHP](https://img.shields.io/badge/FrankenPHP-FFD93C?style=for-the-badge&logo=caddy&logoColor=black)](https://frankenphp.dev/)
 [![Bedrock Roots](https://img.shields.io/badge/Bedrock-Roots.io-525DDC?style=for-the-badge)](https://roots.io/bedrock/)
@@ -42,6 +43,12 @@
   - [💾 Backup \& Disaster Recovery](#-backup--disaster-recovery)
   - [📚 SRE Documentation \& Runbooks](#-sre-documentation--runbooks)
   - [⚙️ Environment Configuration](#️-environment-configuration)
+  - [🗺️ Roadmap](#️-roadmap)
+    - [🟢 Phase 1: Hardening \& Supply Chain Trust (v2.0.x — Current)](#-phase-1-hardening--supply-chain-trust-v20x--current)
+    - [🟡 Phase 2: Distributed Media \& Caching (v2.1.0 — In Progress)](#-phase-2-distributed-media--caching-v210--in-progress)
+    - [🔵 Phase 3: Enterprise Orchestration (v2.2.0 — Planned)](#-phase-3-enterprise-orchestration-v220--planned)
+  - [📋 Changelog](#-changelog)
+  - [🔒 Security Policy](#-security-policy)
   - [🤝 Contributing](#-contributing)
   - [📄 License \& Support](#-license--support)
 
@@ -257,6 +264,46 @@ Operational, production, and triage runbooks are maintained under [`docs/`](docs
 | `WP_SITEURL` | No | `${WP_HOME}/wp` | WordPress core URL |
 | `AUTH_KEY` to `NONCE_SALT` | **Yes** | - | 8 unique cryptographic salts ([Roots Salt Generator](https://roots.io/salts.html)) |
 | `APP_PORT` | No | `8080` | Host port bound to loopback `127.0.0.1` |
+
+---
+
+## 🗺️ Roadmap
+
+Hardened WP follows a transparent, phased evolution focusing on sovereign infrastructure, security engineering, and enterprise operational resilience:
+
+### 🟢 Phase 1: Hardening & Supply Chain Trust (v2.0.x — Current)
+- [x] **Rootless Runtime**: FrankenPHP container executed under numeric non-root UID/GID `82:82` (`www-data:www-data`).
+- [x] **Database Hardening**: MariaDB 11.4 LTS pinned to multi-arch immutable digest (`sha256:...`).
+- [x] **Keyless Signing**: OIDC Cosign container image signing on GHCR releases.
+- [x] **CycloneDX SBOM & OpenVEX**: Automated SBOM generation and OpenVEX justifications (`openvex.json`) for unpatchable upstream dependencies.
+- [x] **CI/CD Hardening**: Top-level read-only permissions, 100% 40-character commit SHA action pinning, and runner pinning to `ubuntu-24.04`.
+- [x] **Release Readiness Gate**: Deterministic local and CI preflight verification target (`make release-ready`).
+- [x] **FinOps Documentation**: Documented ~75–85% cost reduction metrics over hyperscaler managed container stacks.
+
+### 🟡 Phase 2: Distributed Media & Caching (v2.1.0 — In Progress)
+- [ ] **S3 Object Storage Driver**: Native integration with MinIO, Cloudflare R2, and AWS S3 for stateless media offloading.
+- [ ] **Redis Object Caching**: Co-located high-performance Redis cache service with persistent socket configuration.
+- [ ] **Multi-Domain TLS Orchestration**: Automated Let's Encrypt / ZeroSSL certificate issuance via FrankenPHP Caddy ingress.
+
+### 🔵 Phase 3: Enterprise Orchestration (v2.2.0 — Planned)
+- [ ] **Production Helm Charts**: Cloud-native deployment charts for Kubernetes / K3s under Restricted Pod Security Standards.
+- [ ] **OpenTelemetry (OTel) Instrumentation**: Distributed tracing and metrics exporter for PHP worker processes and SQL query timings.
+- [ ] **Automated Media Quarantine**: ClamAV integration for incoming media uploads scanning before filesystem persistence.
+
+---
+
+## 📋 Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for full version history, release notes, and migration guides.
+The project strictly adheres to [Keep a Changelog](https://keepachangelog.com/) and [Semantic Versioning](https://semver.org/).
+
+---
+
+## 🔒 Security Policy
+
+This project follows a coordinated vulnerability disclosure policy.
+If you discover a security vulnerability, **do not open a public issue**.
+Please review [SECURITY.md](./SECURITY.md) for reporting channels and response timelines.
 
 ---
 

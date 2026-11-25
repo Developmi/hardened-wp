@@ -5,17 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.0.3] - 2026-11-24
 
 ### Added
 
 - **OpenVEX Governance Document (`openvex.json`)**: Machine-readable VEX statements documenting `not_affected` exploitability justifications for unpatchable upstream Go runtime components (`CVE-2026-78661`, `CVE-2026-116587`).
 - **Preflight Verification Gate (`make release-ready`)**: Deterministic Makefile umbrella target executing `lint`, `audit`, `build`, `test-security`, and integration tests in sequence.
 - **FinOps Documentation**: Documented Bare Metal / VPS operational cost advantages and ~75–85% OpEx reduction metrics in README.
+- **CI Dependency Vulnerability Gate**: Integrated automated `composer audit` step into CI `lint.yml` workflow.
 
 ### Changed
 
 - **Container Hardening (`libxml2`)**: Upgraded `libxml2` to `2.13.9-r3` via `apk upgrade` in `Dockerfile`, eliminating `CVE-2026-86144`.
+- **MariaDB 11.4 LTS Multi-Arch Pinning**: Pinned `mariadb:11.4` in `docker-compose.yml` to immutable multi-arch index digest `sha256:a8992b5e5404d11e03c54a31d0c1bdea3fd116d283aa6d1a627551f29045309b`.
+- **CI/CD Workflow Hardening**:
+  - Enforced baseline `permissions: contents: read` at top level in `docker-build-scan-sign.yml`.
+  - Pinned all workflow runners to deterministic `ubuntu-24.04` LTS across `docker-build-scan-sign.yml`, `lint.yml`, and `test.yml`.
+  - Configured `concurrency:` groups with `cancel-in-progress: true` in `lint.yml` and `test.yml` to prevent duplicate parallel CI runs.
+- **Standard OCI Container Labels**: Updated image metadata in `Dockerfile` with standard OCI labels (`org.opencontainers.image.*`) and bumped version to `2.0.3`.
 - **Ignore Standard Alignment**: Synchronized `.dockerignore` and `.gitignore` against master standards to exclude Python caches, task tracking, and cryptographic keys.
 - **Trivy CI Alignment**: Pinned `aquasecurity/setup-trivy` to `v0.76.0` across CI workflows and wired `--vex openvex.json`.
 
@@ -79,6 +86,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Operational Automation Scripts**: Initial developer and operational workflows (`scripts/1-setup-dev.sh`, `scripts/2-build-prod.sh`, `scripts/3-backup.sh`).
 - **Initial Repository Structure**: Workspace foundation established in personal repository (`miguel-devops/bedrock-ship`).
 
-[Unreleased]: https://github.com/Developmi/hardened-wp/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/Developmi/hardened-wp/compare/v2.0.3...HEAD
+[2.0.3]: https://github.com/Developmi/hardened-wp/compare/v2.0.2...v2.0.3
+[2.0.2]: https://github.com/Developmi/hardened-wp/compare/v2.0.1...v2.0.2
+[2.0.1]: https://github.com/Developmi/hardened-wp/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/Developmi/hardened-wp/compare/v1.0.0...v2.0.0
 [1.0.0]: https://github.com/Developmi/hardened-wp/releases/tag/v1.0.0
