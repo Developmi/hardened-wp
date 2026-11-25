@@ -39,7 +39,7 @@ chore/bump-dependencies
 ## Pull request process
 
 1. Fork the repository and create your branch from `main`.
-2. Ensure linting passes: `composer lint`
+2. Ensure linting passes: `make lint` (and `make audit`)
 3. Test your changes with a local Docker build: `docker compose up -d --build`
 4. Update documentation if your change affects public behavior (README.md, .env.example).
 5. Open a PR with a clear title following the commit standard.

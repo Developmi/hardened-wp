@@ -22,7 +22,7 @@ RUN composer dump-autoload --optimize --classmap-authoritative --no-dev
 FROM dunglas/frankenphp:1-php8.3-alpine@sha256:d945d1efb0400769ac1a2796b2af29899d8ecc1558df46cff45f9cb864963918
 
 # System security updates & PHP extensions required by WordPress + Bedrock + Acorn
-RUN apk upgrade --no-cache curl libcurl \
+RUN apk upgrade --no-cache curl libcurl libxml2 \
  && install-php-extensions \
     mysqli \
     pdo_mysql \
@@ -55,6 +55,13 @@ RUN mkdir -p /app/web/app/uploads /app/web/app/cache /data/caddy /config/caddy \
 # Health check - verify FrankenPHP is serving WordPress
 HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
     CMD curl -f http://localhost:8080/healthz || exit 1
+
+LABEL org.opencontainers.image.title="hardened-wp" \
+      org.opencontainers.image.description="Hardened, enterprise-grade WordPress distribution built on Roots Bedrock and FrankenPHP" \
+      org.opencontainers.image.version="2.0.3" \
+      org.opencontainers.image.source="https://github.com/Developmi/hardened-wp" \
+      org.opencontainers.image.licenses="MIT" \
+      org.opencontainers.image.authors="Miguel Lozano <miguel@developmi.com>"
 
 USER 82:82
 EXPOSE 8080
